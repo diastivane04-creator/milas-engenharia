@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: #F4F2EA;
+  color: #12140F;
+}
+
+/* Visible keyboard focus, always */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #8FB84A;
+  outline-offset: 3px;
+}
+
+/* Eyebrow / label style used across the site */
+.eyebrow {
+  font-family: var(--font-plex-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Topographic contour-line signature texture.
+   Grounded in Milas's own surveying / precision-topography service —
+   not a decorative default. Used as a subtle background layer only. */
+.contour-field {
+  background-image:
+    repeating-radial-gradient(
+      ellipse at 20% 30%,
+      transparent 0,
+      transparent 38px,
+      rgba(143, 184, 74, 0.10) 39px,
+      rgba(143, 184, 74, 0.10) 40px
+    ),
+    repeating-radial-gradient(
+      ellipse at 85% 70%,
+      transparent 0,
+      transparent 52px,
+      rgba(181, 80, 42, 0.07) 53px,
+      rgba(181, 80, 42, 0.07) 54px
+    );
+}
+
+.contour-field-dark {
+  background-image:
+    repeating-radial-gradient(
+      ellipse at 20% 30%,
+      transparent 0,
+      transparent 38px,
+      rgba(143, 184, 74, 0.08) 39px,
+      rgba(143, 184, 74, 0.08) 40px
+    ),
+    repeating-radial-gradient(
+      ellipse at 85% 70%,
+      transparent 0,
+      transparent 52px,
+      rgba(217, 127, 79, 0.06) 53px,
+      rgba(217, 127, 79, 0.06) 54px
+    );
+}
+
+.text-balance {
+  text-wrap: balance;
+}

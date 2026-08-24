@@ -47,26 +47,48 @@ Copie `.env.example` para `.env.local` e preencha:
 | Variável | Obrigatória | Descrição |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | Sim | URL final do site (usado no sitemap, robots.txt, canonical e Open Graph) |
-| `RESEND_API_KEY` / `RFQ_NOTIFICATION_EMAIL` | Não (ver abaixo) | Envio de email dos pedidos de orçamento |
+| `RESEND_API_KEY` | Sim, para receber pedidos por email (ver abaixo) | Chave de API do Resend |
+| `RFQ_NOTIFICATION_EMAIL` | Não | Para onde os pedidos são enviados (por omissão, `milas.engenharia@gmail.com`) |
+| `RESEND_FROM_EMAIL` | Não | Endereço de envio (ver abaixo) |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Não | Google Analytics |
 
 **Nunca** coloque chaves ou credenciais directamente no código — usam-se
 sempre variáveis de ambiente, e `.env.local` nunca é submetido ao
 controlo de versões (já está no `.gitignore`).
 
-## Ligar o Formulário RFQ a um Serviço de Email
+## Formulário RFQ — Recepção de Pedidos por Email
 
-O formulário em `/contacto` já valida, limita a taxa de pedidos (rate
-limiting) e protege contra spam (campo *honeypot*) e injecção. Falta apenas
-ligar o envio de email — a rota está em `app/api/rfq/route.ts`, com um
-exemplo comentado usando o [Resend](https://resend.com). Basta:
+O formulário em `/contacto` valida os dados, limita a taxa de pedidos (rate
+limiting), protege contra spam (campo *honeypot*) e injecção, e **já envia
+email automaticamente** através do [Resend](https://resend.com) — só falta
+configurar a chave de API:
 
-1. Criar conta no Resend (ou outro fornecedor à escolha)
-2. Adicionar `RESEND_API_KEY` e `RFQ_NOTIFICATION_EMAIL` às variáveis de
-   ambiente do projecto
-3. Descomentar o bloco de código correspondente na rota
+1. Criar conta gratuita em [resend.com](https://resend.com)
+2. Gerar uma API key em **Resend → API Keys**
+3. Adicionar as seguintes variáveis de ambiente ao projecto (ver
+   `.env.example`):
+   - `RESEND_API_KEY` — a chave gerada no passo anterior
+   - `RFQ_NOTIFICATION_EMAIL` — para onde os pedidos são enviados
+     (por omissão, `milas.engenharia@gmail.com`)
+   - `RESEND_FROM_EMAIL` — endereço de envio. Funciona de imediato com o
+     endereço de teste do Resend (`onboarding@resend.dev`), mas para uso
+     em produção recomenda-se verificar o domínio da Milas Engenharia no
+     Resend e usar um endereço próprio (ex:
+     `Milas Engenharia <rfq@milasengenharia.co.mz>`)
 
-Até lá, os pedidos submetidos ficam registados nos logs do servidor.
+Cada email de notificação inclui todos os dados do pedido e tem o campo
+"Responder a" (*reply-to*) já preenchido com o email de quem submeteu o
+formulário — basta responder directamente ao email recebido.
+
+Se `RESEND_API_KEY` não estiver definida, o formulário continua a validar e
+registar os pedidos nos logs do servidor, mas não envia email — a pessoa que
+submeter vê uma mensagem a informar que o envio falhou, para não pensar que
+o pedido chegou quando na realidade não chegou.
+
+**Local:** para testar em `npm run dev`, criar um ficheiro `.env.local`
+(nunca commitado) com as mesmas variáveis.
+**Vercel:** adicionar as variáveis em **Project → Settings → Environment
+Variables**.
 
 ## Deployment (Vercel)
 

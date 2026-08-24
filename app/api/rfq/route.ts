@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { company } from "@/lib/content";
 
 export const runtime = "nodejs";
 
@@ -83,30 +84,126 @@ export async function POST(req: NextRequest) {
     ip,
   };
 
-  // --------------------------------------------------------------------
-  // DELIVERY HOOK
-  // No email/SMS provider is wired up yet — wire one here using
-  // environment variables (never hardcode credentials). For example,
-  // with Resend (https://resend.com):
-  //
-  //   const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  //   await fetch("https://api.resend.com/emails", {
-  //     method: "POST",
-  //     headers: {
-  //       Authorization: `Bearer ${RESEND_API_KEY}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       from: "RFQ Website <rfq@yourdomain.co.mz>",
-  //       to: process.env.RFQ_NOTIFICATION_EMAIL,
-  //       subject: `Novo pedido de orçamento — ${submission.company || submission.name}`,
-  //       text: JSON.stringify(submission, null, 2),
-  //     }),
-  //   });
-  //
-  // See README.md → "Environment Variables" and "Ligar o Formulário RFQ".
-  // --------------------------------------------------------------------
   console.log("[RFQ submission]", submission);
 
+  const emailResult = await sendNotificationEmail(submission);
+
+  if (!emailResult.ok) {
+    // The submission is valid but we couldn't deliver it — say so plainly
+    // rather than pretending it worked, and point to a fallback channel.
+    return NextResponse.json(
+      {
+        error:
+          "Não foi possível enviar o pedido por email neste momento. Tente novamente ou contacte-nos directamente por WhatsApp ou telefone.",
+      },
+      { status: 502 }
+    );
+  }
+
   return NextResponse.json({ ok: true });
+}
+
+type RfqSubmission = {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  service: string;
+  location: string;
+  description: string;
+  receivedAt: string;
+  ip: string;
+};
+
+async function sendNotificationEmail(
+  submission: RfqSubmission
+): Promise<{ ok: boolean }> {
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    // Not configured yet — see README "Ligar o Formulário RFQ a um Serviço
+    // de Email". The submission is still captured in the server logs above
+    // so nothing is lost, but no email goes out until RESEND_API_KEY is set.
+    console.warn(
+      "[RFQ] RESEND_API_KEY não está definida — email não enviado. Ver README."
+    );
+    return { ok: false };
+  }
+
+  const notifyTo = process.env.RFQ_NOTIFICATION_EMAIL || company.email;
+  const fromAddress =
+    process.env.RESEND_FROM_EMAIL || "Site Milas Engenharia <onboarding@resend.dev>";
+
+  const subjectLine = `Novo pedido de orçamento — ${submission.company || submission.name}`;
+
+  const textBody = [
+    `Nome: ${submission.name}`,
+    `Empresa: ${submission.company || "—"}`,
+    `Email: ${submission.email}`,
+    `Telefone: ${submission.phone || "—"}`,
+    `Serviço pretendido: ${submission.service}`,
+    `Localização do projecto: ${submission.location || "—"}`,
+    "",
+    "Descrição do projecto:",
+    submission.description,
+    "",
+    `Recebido em: ${submission.receivedAt}`,
+  ].join("\n");
+
+  const htmlBody = `
+    <div style="font-family: sans-serif; line-height: 1.6; color: #12140F;">
+      <h2 style="margin-bottom: 4px;">Novo pedido de orçamento</h2>
+      <p style="color: #666; margin-top: 0;">Recebido em ${submission.receivedAt}</p>
+      <table cellpadding="6" cellspacing="0" style="border-collapse: collapse;">
+        <tr><td><strong>Nome</strong></td><td>${escapeHtml(submission.name)}</td></tr>
+        <tr><td><strong>Empresa</strong></td><td>${escapeHtml(submission.company) || "—"}</td></tr>
+        <tr><td><strong>Email</strong></td><td>${escapeHtml(submission.email)}</td></tr>
+        <tr><td><strong>Telefone</strong></td><td>${escapeHtml(submission.phone) || "—"}</td></tr>
+        <tr><td><strong>Serviço</strong></td><td>${escapeHtml(submission.service)}</td></tr>
+        <tr><td><strong>Localização</strong></td><td>${escapeHtml(submission.location) || "—"}</td></tr>
+      </table>
+      <p><strong>Descrição do projecto:</strong></p>
+      <p style="white-space: pre-wrap;">${escapeHtml(submission.description)}</p>
+    </div>
+  `;
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: fromAddress,
+        to: notifyTo,
+        // Lets whoever reads the notification hit "Reply" and it goes
+        // straight to the person who submitted the form.
+        reply_to: submission.email,
+        subject: subjectLine,
+        text: textBody,
+        html: htmlBody,
+      }),
+    });
+
+    if (!res.ok) {
+      const errorBody = await res.text().catch(() => "");
+      console.error("[RFQ] Resend API error", res.status, errorBody);
+      return { ok: false };
+    }
+
+    return { ok: true };
+  } catch (err) {
+    console.error("[RFQ] Failed to reach email provider", err);
+    return { ok: false };
+  }
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }

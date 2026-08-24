@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Contacto",
   description:
     "Entre em contacto com a Milas Engenharia e Obras Públicas para pedidos de orçamento e informações sobre os nossos serviços em Moçambique.",
+  alternates: {
+    canonical: "/contacto",
+  },
 };
 
 export default function ContactoPage() {

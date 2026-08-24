@@ -3,7 +3,11 @@ import { company } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Termos e Condições",
-  robots: { index: false, follow: true },
+  description:
+    "Termos e condições de utilização do site da Milas Engenharia e Obras Públicas, Lda.",
+  alternates: {
+    canonical: "/termos",
+  },
 };
 
 export default function TermosPage() {

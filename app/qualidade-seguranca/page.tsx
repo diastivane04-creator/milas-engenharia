@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Qualidade & Segurança",
   description:
     "O compromisso da Milas Engenharia com a segurança no trabalho, o rigor técnico e a qualidade de execução em cada obra.",
+  alternates: {
+    canonical: "/qualidade-seguranca",
+  },
 };
 
 export default function QualidadeSegurancaPage() {

@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Perfil da Empresa",
   description:
     "Descarregue o perfil oficial da Milas Engenharia e Obras Públicas, Lda em PDF.",
+  alternates: {
+    canonical: "/perfil-da-empresa",
+  },
 };
 
 export default function PerfilEmpresaPage() {

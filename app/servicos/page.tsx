@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Serviços",
   description:
     "Estradas e pavimentação, edificações, estruturas metálicas, consultoria e desenho de projectos — as áreas de actuação da Milas Engenharia em Moçambique.",
+  alternates: {
+    canonical: "/servicos",
+  },
 };
 
 export default function ServicosPage() {

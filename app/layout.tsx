@@ -4,7 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import { company, siteUrl } from "@/lib/content";
+import { company, siteUrl, metaDescription } from "@/lib/content";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -30,10 +30,10 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${company.name} | Engenharia Civil e Obras Públicas em Moçambique`,
+    default: "Milas Engenharia | Construção Civil e Obras Públicas em Moçambique",
     template: `%s | ${company.shortName}`,
   },
-  description: company.descriptionShort,
+  description: metaDescription,
   keywords: [
     "engenharia civil Moçambique",
     "construção de estradas Maputo",
@@ -43,24 +43,31 @@ export const metadata: Metadata = {
     "obras públicas Maputo",
     "terraplanagem Moçambique",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "pt_MZ",
     url: siteUrl,
     siteName: company.name,
-    title: `${company.name} | Engenharia Civil e Obras Públicas`,
-    description: company.descriptionShort,
+    title: "Milas Engenharia | Construção Civil e Obras Públicas em Moçambique",
+    description: metaDescription,
     images: [{ url: "/images/hero-grader-wide.jpg", width: 1000, height: 750 }],
   },
   twitter: {
     card: "summary_large_image",
     title: company.name,
-    description: company.descriptionShort,
+    description: metaDescription,
     images: ["/images/hero-grader-wide.jpg"],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
   verification: {
     google: "l48sUqpG1HOqHpKC2n0yixVODsPzlXLKYUx9-sK8DA0",

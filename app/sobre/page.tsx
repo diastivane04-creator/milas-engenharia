@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Sobre Nós",
   description:
     "Conheça a Milas Engenharia e Obras Públicas: missão, visão, valores e a equipa técnica por trás das nossas obras em Moçambique.",
+  alternates: {
+    canonical: "/sobre",
+  },
 };
 
 export default function SobrePage() {

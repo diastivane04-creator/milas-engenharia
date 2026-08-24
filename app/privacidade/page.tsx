@@ -3,7 +3,11 @@ import { company } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade",
-  robots: { index: false, follow: true },
+  description:
+    "Política de privacidade da Milas Engenharia e Obras Públicas, Lda sobre a recolha e utilização de dados submetidos através do site.",
+  alternates: {
+    canonical: "/privacidade",
+  },
 };
 
 export default function PrivacidadePage() {

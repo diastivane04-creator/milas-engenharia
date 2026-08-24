@@ -214,5 +214,14 @@ export const clientsTextOnly = ["Gabinete do Secretário do Estado", "SDPI — S
 export const clientsIntro =
   "Trabalhamos com entidades públicas, municípios e organizações nacionais e internacionais em projectos de infraestrutura em Moçambique.";
 
+// Canonical production URL. Falls back to the live Vercel deployment so
+// sitemap.xml, robots.txt, canonical tags, and Open Graph/Twitter metadata
+// are always correct even before a custom domain is connected.
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.milasengenharia.co.mz";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://milas-engenharia.vercel.app";
+
+// Search-engine-facing description, kept under ~160 characters per SEO best
+// practice. Distinct from company.descriptionShort (used in visible page
+// copy) so the on-page text is never changed for SEO purposes.
+export const metaDescription =
+  "Milas Engenharia e Obras Públicas, Lda: engenharia civil e mecânica em Moçambique. Estradas, edificações, estruturas metálicas e obras públicas.";

@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Projectos",
   description:
     "Trabalho no terreno da Milas Engenharia: grandes empreendimentos, estruturas em betão armado, infraestruturas hidráulicas e pavimentação em Moçambique.",
+  alternates: {
+    canonical: "/projectos",
+  },
 };
 
 export default function ProjectosPage() {

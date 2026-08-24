@@ -70,7 +70,14 @@ Até lá, os pedidos submetidos ficam registados nos logs do servidor.
 
 ## Deployment (Vercel)
 
-1. Publicar este repositório no GitHub/GitLab
+1. Publicar este repositório no GitHub/GitLab — o repositório já vem com
+   `git init` feito e o primeiro commit criado. Basta criar um repositório
+   vazio no GitHub e correr:
+   ```bash
+   git remote add origin https://github.com/SEU-UTILIZADOR/milas-engenharia.git
+   git branch -M main
+   git push -u origin main
+   ```
 2. Importar o repositório em [vercel.com](https://vercel.com)
 3. Adicionar as variáveis de ambiente do `.env.example` no painel do
    projecto Vercel

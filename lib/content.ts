@@ -18,8 +18,8 @@ export const company = {
     "A Milas Engenharia e Obras Públicas, Lda é uma empresa moçambicana de engenharia civil e mecânica, vocacionada para a construção e manutenção de infraestruturas rodoviárias, edificações e estruturas metálicas. Combinamos equipas técnicas qualificadas, frota própria de equipamento pesado e uma gestão rigorosa de projectos para entregar obras de qualidade a entidades públicas, municípios e organizações internacionais em Moçambique.",
   location: "Maputo, Moçambique",
   email: "milas.engenharia@gmail.com",
-  phones: ["+258 84 256 8096", "+258 87 256 8069"],
-  whatsappNumber: "258842568096", // international format, no symbols, for wa.me links
+  phones: ["+258 84 256 8069", "+258 87 256 8069"],
+  whatsappNumber: "258842568069", // international format, no symbols, for wa.me links
   whatsappMessage:
     "Olá Milas Engenharia, gostaria de obter mais informações sobre os vossos serviços.",
 } as const;
